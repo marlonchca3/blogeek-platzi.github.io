@@ -2,7 +2,7 @@ $(() => {
   $('.tooltipped').tooltip({ delay: 50 })
   $('.modal').modal()
 
-  firebase.initializeApp(varConfig)
+  const app = initializeApp(firebaseConfig);
 
   // Se registra el service worker
   navigator.serviceWorker
