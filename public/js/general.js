@@ -2,8 +2,6 @@ $(() => {
   $('.tooltipped').tooltip({ delay: 50 })
   $('.modal').modal()
 
-  const app = initializeApp(firebaseConfig);
-
   // Se registra el service worker
   navigator.serviceWorker
     .register('notificaciones-sw.js')
