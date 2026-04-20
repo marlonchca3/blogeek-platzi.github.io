@@ -1,8 +1,16 @@
 class Post {
   constructor () {
     this.db = firebase.firestore()
-    const settings = { timestampsInSnapshots: true }
-    this.db.settings(settings)
+
+    if (!Post.firestoreConfigurado) {
+      try {
+        this.db.settings({ timestampsInSnapshots: true })
+      } catch (error) {
+        console.warn(`Firestore ya estaba configurado => ${error.message}`)
+      }
+
+      Post.firestoreConfigurado = true
+    }
   }
 
   crearPost (uid, emailUser, titulo, descripcion, imagenLink, videoLink) {
@@ -19,9 +27,11 @@ class Post {
       })
       .then(refDoc => {
         console.log(`Id del post => ${refDoc.id}`)
+        return refDoc
       })
       .catch(error => {
         console.error(`Error creando el post => ${error}`)
+        throw error
       })
   }
 
@@ -36,17 +46,21 @@ class Post {
           $('#posts').append(this.obtenerTemplatePostVacio())
         } else {
           querySnapshot.forEach(post => {
+            const data = post.data()
             let postHtml = this.obtenerPostTemplate(
-              post.data().autor,
-              post.data().titulo,
-              post.data().descripcion,
-              post.data().videoLink,
-              post.data().imagenLink,
-              Utilidad.obtenerFecha(post.data().fecha.toDate())
+              data.autor,
+              data.titulo,
+              data.descripcion,
+              data.videoLink,
+              data.imagenLink,
+              this.obtenerFechaPost(data.fecha)
             )
             $('#posts').append(postHtml)
           })
         }
+      }, error => {
+        console.error(`Error consultando posts => ${error}`)
+        Materialize.toast(`Error consultando posts => ${error.message}`, 5000)
       })
   }
 
@@ -62,18 +76,30 @@ class Post {
           $('#posts').append(this.obtenerTemplatePostVacio())
         } else {
           querySnapshot.forEach(post => {
+            const data = post.data()
             let postHtml = this.obtenerPostTemplate(
-              post.data().autor,
-              post.data().titulo,
-              post.data().descripcion,
-              post.data().videoLink,
-              post.data().imagenLink,
-              Utilidad.obtenerFecha(post.data().fecha.toDate())
+              data.autor,
+              data.titulo,
+              data.descripcion,
+              data.videoLink,
+              data.imagenLink,
+              this.obtenerFechaPost(data.fecha)
             )
             $('#posts').append(postHtml)
           })
         }
+      }, error => {
+        console.error(`Error consultando posts del usuario => ${error}`)
+        Materialize.toast(`Error consultando tus posts => ${error.message}`, 5000)
       })
+  }
+
+  obtenerFechaPost (fecha) {
+    if (fecha && fecha.toDate) {
+      return Utilidad.obtenerFecha(fecha.toDate())
+    }
+
+    return Utilidad.obtenerFecha(new Date())
   }
 
   subirImagenPost (file, uid) {

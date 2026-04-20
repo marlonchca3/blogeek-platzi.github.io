@@ -33,6 +33,11 @@ $(() => {
       ? null
       : sessionStorage.getItem('imgNewPost')
 
+    if (!titulo || !descripcion || !videoLink) {
+      Materialize.toast(`Completa titulo, descripcion y enlace del video`, 4000)
+      return
+    }
+
     post
       .crearPost(
         user.uid,
@@ -47,13 +52,25 @@ $(() => {
         $('.modal').modal('close')
       })
       .catch(err => {
-        Materialize.toast(`Error => ${err}`, 4000)
+        console.error(err)
+        Materialize.toast(`Error creando post => ${err.message}`, 5000)
       })
   })
 
   $('#btnUploadFile').on('change', e => {
     const file = e.target.files[0]
     const user = firebase.auth().currentUser
+
+    if (user == null) {
+      Materialize.toast(`Para subir imagen debes estar autenticado`, 4000)
+      $('#btnUploadFile').val('')
+      return
+    }
+
+    if (!file) {
+      return
+    }
+
     const post = new Post()
     post.subirImagenPost(file, user.uid)
   })
