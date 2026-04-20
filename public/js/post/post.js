@@ -38,26 +38,8 @@ class Post {
   consultarTodosPost () {
     this.db
       .collection('posts')
-      .orderBy('fecha', 'asc')
-      .orderBy('titulo', 'asc')
       .onSnapshot(querySnapshot => {
-        $('#posts').empty()
-        if (querySnapshot.empty) {
-          $('#posts').append(this.obtenerTemplatePostVacio())
-        } else {
-          querySnapshot.forEach(post => {
-            const data = post.data()
-            let postHtml = this.obtenerPostTemplate(
-              data.autor,
-              data.titulo,
-              data.descripcion,
-              data.videoLink,
-              data.imagenLink,
-              this.obtenerFechaPost(data.fecha)
-            )
-            $('#posts').append(postHtml)
-          })
-        }
+        this.pintarPosts(querySnapshot)
       }, error => {
         console.error(`Error consultando posts => ${error}`)
         Materialize.toast(`Error consultando posts => ${error.message}`, 5000)
@@ -67,31 +49,55 @@ class Post {
   consultarPostxUsuario (emailUser) {
     this.db
       .collection('posts')
-      .orderBy('fecha', 'asc')
-      .orderBy('titulo', 'asc')
       .where('autor', '==', emailUser)
       .onSnapshot(querySnapshot => {
-        $('#posts').empty()
-        if (querySnapshot.empty) {
-          $('#posts').append(this.obtenerTemplatePostVacio())
-        } else {
-          querySnapshot.forEach(post => {
-            const data = post.data()
-            let postHtml = this.obtenerPostTemplate(
-              data.autor,
-              data.titulo,
-              data.descripcion,
-              data.videoLink,
-              data.imagenLink,
-              this.obtenerFechaPost(data.fecha)
-            )
-            $('#posts').append(postHtml)
-          })
-        }
+        this.pintarPosts(querySnapshot)
       }, error => {
         console.error(`Error consultando posts del usuario => ${error}`)
         Materialize.toast(`Error consultando tus posts => ${error.message}`, 5000)
       })
+  }
+
+  pintarPosts (querySnapshot) {
+    $('#posts').empty()
+
+    if (querySnapshot.empty) {
+      $('#posts').append(this.obtenerTemplatePostVacio())
+      return
+    }
+
+    const posts = []
+    querySnapshot.forEach(post => {
+      posts.push(post.data())
+    })
+
+    posts
+      .sort((postA, postB) => {
+        const fechaA = this.obtenerTiempoPost(postA.fecha)
+        const fechaB = this.obtenerTiempoPost(postB.fecha)
+
+        return fechaB - fechaA
+      })
+      .forEach(post => {
+        const postHtml = this.obtenerPostTemplate(
+          post.autor,
+          post.titulo,
+          post.descripcion,
+          post.videoLink,
+          post.imagenLink,
+          this.obtenerFechaPost(post.fecha)
+        )
+
+        $('#posts').append(postHtml)
+      })
+  }
+
+  obtenerTiempoPost (fecha) {
+    if (fecha && fecha.toDate) {
+      return fecha.toDate().getTime()
+    }
+
+    return 0
   }
 
   obtenerFechaPost (fecha) {
