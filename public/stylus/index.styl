@@ -522,3 +522,313 @@ body
 		
 	.modal-registro
 		width 70% !important
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+html {
+  min-width: 320px;
+}
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: #f5f7f8;
+}
+img,
+iframe {
+  max-width: 100%;
+}
+.headerppal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 16px 28px;
+  overflow: visible;
+}
+.headerppal .header-logotipo {
+  margin: 0;
+}
+.headerppal .header-logotipo img {
+  width: 112px;
+  height: 112px;
+  padding: 14px;
+}
+.headerppal .header-logotipo img:hover {
+  transform: none;
+}
+.headerppal .titulo {
+  margin-top: 6px;
+  font-size: 30px;
+  line-height: 1.15;
+  text-align: center;
+}
+.headerppal .titulo-a {
+  margin: 0;
+  padding: 0 0 10px;
+  font-size: 17px;
+  line-height: 1.4;
+  text-align: center;
+}
+.headerppal .header-avatar {
+  display: block;
+  float: none;
+  margin: 0;
+}
+.headerppal .header-avatar img {
+  width: 56px;
+  height: 56px;
+  transform: none;
+}
+.menu {
+  height: auto;
+  border-left: 0;
+}
+.menu ul {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+.menu ul li {
+  line-height: 1.2;
+}
+.menu ul li a {
+  display: block;
+  padding: 14px 18px;
+  text-align: center;
+}
+.menu ul li a:hover,
+.btnPpal:hover {
+  font-size: inherit;
+}
+.titulo-posts {
+  margin: 24px 16px 12px;
+  font-size: 25px;
+  line-height: 1.25;
+}
+.posts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  padding: 16px;
+}
+.posts .post {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+}
+.posts .post .post-titulo h5 {
+  margin: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+.posts .post .post-video {
+  padding: 0;
+  background: #111;
+}
+.posts .post .post-video iframe,
+.posts .post .post-video .post-imagen-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+}
+.posts .post .post-video .post-imagen-video {
+  object-fit: cover;
+}
+.posts .post .post-descripcion {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  overflow-wrap: anywhere;
+}
+.posts .post .post-footer {
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: center;
+}
+.footer {
+  margin-top: 24px;
+}
+.footer .contenedor-footer {
+  gap: 24px;
+  padding: 24px 16px;
+}
+.footer .contenedor-footer .formulario-contactenos {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+.footer .contenedor-footer .formulario-contactenos .form-col1,
+.footer .contenedor-footer .formulario-contactenos .form-col2 {
+  width: 100%;
+  margin-right: 0;
+}
+.footer .contenedor-footer .formulario-contactenos .form-col1 .tipos-comentarios {
+  gap: 4px;
+}
+.footer .contenedor-footer .formulario-contactenos .form-col2 textarea {
+  width: 100%;
+}
+.footer .contenedor-footer .redesSociales .realizadopor {
+  padding-top: 0;
+}
+.footer .contenedor-footer .redesSociales .realizadoclase {
+  padding-bottom: 12px;
+}
+.modal-registro {
+  width: 94% !important;
+  max-height: 88% !important;
+}
+.modal-registro .modal-content {
+  padding: 18px;
+}
+.registro-bienvenida {
+  margin-bottom: 20px;
+}
+.registro-bienvenida .registro-bienvenida-texto {
+  text-align: center;
+}
+.registro-formulario {
+  border-left: 0;
+  border-top: 4px solid #126798;
+  padding-top: 18px !important;
+}
+.registro-formulario a,
+.div-btnRegistrarse a {
+  width: 100% !important;
+  margin-top: 16px;
+}
+.registro-formulario .registro-iconos-redes .logo-google {
+  margin-left: 0;
+}
+#btnUploadFile {
+  width: 100%;
+}
+
+@media screen and (min-width: 600px) {
+  .headerppal .titulo {
+    font-size: 36px;
+  }
+  .headerppal .titulo-a {
+    font-size: 19px;
+  }
+  .posts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 22px;
+  }
+  .footer .contenedor-footer .formulario-contactenos .form-col1 .tipos-comentarios {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0 12px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .headerppal {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr) 90px;
+    grid-template-areas:
+      "logo title avatar"
+      "logo subtitle avatar"
+      "logo login avatar";
+    align-items: center;
+    gap: 20px;
+    padding: 24px 42px 30px;
+    text-align: center;
+  }
+  .headerppal .header-logotipo {
+    float: none;
+    grid-area: logo;
+  }
+  .headerppal .header-logotipo img {
+    width: 130px;
+    height: 130px;
+  }
+  .headerppal .titulo {
+    grid-area: title;
+    margin-top: 0;
+    font-size: 40px;
+  }
+  .headerppal .titulo-a {
+    grid-area: subtitle;
+  }
+  .headerppal #btnInicioSesion {
+    grid-area: login;
+    justify-self: center;
+  }
+  .headerppal .header-avatar {
+    grid-area: avatar;
+    justify-self: end;
+  }
+  .headerppal .header-avatar img {
+    width: 72px;
+    height: 72px;
+  }
+  .menu ul {
+    flex-direction: row;
+    justify-content: center;
+    height: auto;
+  }
+  .menu ul li {
+    display: block;
+  }
+  .posts .post {
+    display: flex;
+    width: 100%;
+    margin: 0;
+  }
+  .posts .post .post-descripcion {
+    height: auto;
+  }
+  .footer .contenedor-footer {
+    align-items: flex-start;
+    padding: 30px 24px;
+  }
+  .footer .contenedor-footer .formulario-contactenos {
+    gap: 24px;
+    margin-top: 0;
+  }
+  .footer .contenedor-footer .redesSociales {
+    flex: 0 0 260px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .registro-formulario {
+    border-top: 0;
+    border-left: 0.3em solid #126798;
+    padding-top: 0 !important;
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  .posts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .modal-registro {
+    width: 64% !important;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .headerppal .titulo {
+    font-size: 26px;
+  }
+  .headerppal .titulo-a,
+  .posts .post .post-descripcion,
+  .posts .post .post-videolink {
+    font-size: 15px;
+  }
+  .modal-registro .modal-content {
+    padding: 14px;
+  }
+  .registro-bienvenida h4 {
+    font-size: 1.35em;
+  }
+}
