@@ -108,6 +108,35 @@ class Post {
     return Utilidad.obtenerFecha(new Date())
   }
 
+  obtenerYoutubeEmbedLink (videoLink) {
+    if (!videoLink) {
+      return ''
+    }
+
+    try {
+      const url = new URL(videoLink)
+      let videoId = ''
+
+      if (url.hostname.includes('youtu.be')) {
+        videoId = url.pathname.split('/').filter(Boolean)[0]
+      } else if (url.pathname.includes('/embed/')) {
+        videoId = url.pathname.split('/embed/')[1].split('/')[0]
+      } else if (url.pathname.includes('/shorts/')) {
+        videoId = url.pathname.split('/shorts/')[1].split('/')[0]
+      } else {
+        videoId = url.searchParams.get('v')
+      }
+
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`
+      }
+    } catch (error) {
+      console.warn(`No se pudo convertir el enlace de video => ${error.message}`)
+    }
+
+    return videoLink
+  }
+
   subirImagenPost (file, uid) {
     const refStorage = firebase.storage().ref(`imgsPosts/${uid}/${file.name}`)
     const task = refStorage.put(file)
@@ -171,6 +200,8 @@ class Post {
     imagenLink,
     fecha
   ) {
+    const videoEmbedLink = this.obtenerYoutubeEmbedLink(videoLink)
+
     if (imagenLink) {
       return `<article class="post">
             <div class="post-titulo">
@@ -188,7 +219,11 @@ class Post {
                     alt="Imagen Video">     
             </div>
             <div class="post-videolink">
-                <a href="${videoLink}" target="blank">Ver Video</a>                            
+                <a href="${videoLink}" target="_blank" rel="noopener">Abrir video en YouTube</a>
+            </div>
+            <div class="post-video">
+                <iframe type="text/html" width="500" height="385" src='${videoEmbedLink}'
+                    frameborder="0" allowfullscreen></iframe>
             </div>
             <div class="post-descripcion">
                 <p>${descripcion}</p>
@@ -218,12 +253,11 @@ class Post {
                     <a class="post-estrellita-vacia" href="*"></a>
                 </div>
                 <div class="post-video">
-                    <iframe type="text/html" width="500" height="385" src='${videoLink}'
-                        frameborder="0"></iframe>
-                    </figure>
+                    <iframe type="text/html" width="500" height="385" src='${videoEmbedLink}'
+                        frameborder="0" allowfullscreen></iframe>
                 </div>
                 <div class="post-videolink">
-                    Video
+                    <a href="${videoLink}" target="_blank" rel="noopener">Abrir video en YouTube</a>
                 </div>
                 <div class="post-descripcion">
                     <p>${descripcion}</p>
