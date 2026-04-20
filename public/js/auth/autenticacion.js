@@ -30,7 +30,7 @@ class Autenticacion {
         })
 
         const configuracion = {
-          url: 'http://localhost:5500/public/'
+          url: 'https://marlonchca3.github.io/blogeek-platzi.github.io/public/'
         }
 
         result.user.sendEmailVerification(configuracion).catch(error => {
