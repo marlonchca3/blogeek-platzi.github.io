@@ -103,6 +103,27 @@ $(() => {
       })
 
     const messaging = firebase.messaging()
+    const guardarToken = token => {
+      const user = firebase.auth().currentUser
+
+      if (!user) {
+        console.log('Token no guardado porque no hay usuario autenticado')
+        return
+      }
+
+      firebase
+        .firestore()
+        .collection('tokens')
+        .doc(token)
+        .set({
+          token: token,
+          uid: user.uid,
+          email: user.email
+        })
+        .catch(error => {
+          console.error(`Error al insertar el token en la BD => ${error}`)
+        })
+    }
 
     // Registrar credenciales web
     messaging.usePublicVapidKey(
@@ -119,17 +140,7 @@ $(() => {
       .then(token => {
         console.log('token')
         console.log(token)
-        const db = firebase.firestore()
-        db.settings({ timestampsInSnapshots: true })
-        db
-          .collection('tokens')
-          .doc(token)
-          .set({
-            token: token
-          })
-          .catch(error => {
-            console.error(`Error al insertar el token en la BD => ${error}`)
-          })
+        guardarToken(token)
       })
       .catch(error => {
         console.error(`Permiso no otorgado => ${error}`)
@@ -139,17 +150,7 @@ $(() => {
     messaging.onTokenRefresh(() => {
       messaging.getToken().then(token => {
         console.log('token se ha renovado')
-        const db = firebase.firestore()
-        db.settings({ timestampsInSnapshots: true })
-        db
-          .collection('tokens')
-          .doc(token)
-          .set({
-            token: token
-          })
-          .catch(error => {
-            console.error(`Error al insertar el token en la BD => ${error}`)
-          })
+        guardarToken(token)
       })
     })
 
