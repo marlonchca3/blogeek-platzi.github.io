@@ -5,6 +5,44 @@ $(() => {
   const firebaseEstaInicializado = () =>
     typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length
 
+  const mostrarPostsBloqueados = () => {
+    $('#tituloPost').text('Suscribete para ver los posts')
+    $('#posts').html(`
+      <article class="post">
+        <div class="post-titulo">
+          <h5>Debes iniciar sesion para ver los posts</h5>
+        </div>
+        <div class="post-descripcion">
+          <p>Suscribete o inicia sesion para acceder a los posts de la comunidad.</p>
+        </div>
+      </article>
+    `)
+  }
+
+  const cargarPostsComunidad = ({ notificarSiNoHaySesion = false } = {}) => {
+    if (!firebaseEstaInicializado()) {
+      Materialize.toast('Firebase aun no esta configurado en esta pagina', 4000)
+      return false
+    }
+
+    const user = firebase.auth().currentUser
+    if (!user) {
+      mostrarPostsBloqueados()
+
+      if (notificarSiNoHaySesion) {
+        Materialize.toast('Debes estar suscrito para ver los posts', 4000)
+      }
+
+      return false
+    }
+
+    $('#tituloPost').text('Posts de la Comunidad')
+    const post = new Post()
+    post.consultarTodosPost()
+
+    return true
+  }
+
   // Evento boton inicio sesion
   $('#btnInicioSesion').click(() => {
     if (!firebaseEstaInicializado()) {
@@ -54,15 +92,7 @@ $(() => {
   })
 
   $('#btnTodoPost').click(() => {
-    $('#tituloPost').text('Posts de la Comunidad')
-
-    if (!firebaseEstaInicializado()) {
-      Materialize.toast('Firebase aun no esta configurado en esta pagina', 4000)
-      return
-    }
-
-    const post = new Post()
-    post.consultarTodosPost()
+    cargarPostsComunidad({ notificarSiNoHaySesion: true })
   })
 
   $('#btnMisPost').click(() => {
@@ -164,8 +194,7 @@ $(() => {
     })
   }
 
-  const post = new Post()
-  post.consultarTodosPost()
+  mostrarPostsBloqueados()
 
   // Firebase observador del cambio de estado de auth
   firebase.auth().onAuthStateChanged(user => {
@@ -176,9 +205,12 @@ $(() => {
       } else {
         $('#avatar').attr('src', 'imagenes/usuario_auth.png')
       }
+
+      cargarPostsComunidad()
     } else {
       $('#btnInicioSesion').text('Iniciar Sesión')
       $('#avatar').attr('src', 'imagenes/usuario.png')
+      mostrarPostsBloqueados()
     }
   })
 })
