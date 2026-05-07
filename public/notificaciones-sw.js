@@ -2,8 +2,8 @@ importScripts('https://www.gstatic.com/firebasejs/5.5.8/firebase-app.js')
 importScripts('https://www.gstatic.com/firebasejs/5.5.8/firebase-messaging.js')
 
 firebase.initializeApp({
-  projectId: 'blogeekplatzi-4836b',
-  messagingSenderId: '359502061382'
+  projectId: 'blogeekplatzi1-8afed',
+  messagingSenderId: '6699378495'
 })
 
 const messaging = firebase.messaging()
@@ -14,7 +14,7 @@ messaging.setBackgroundMessageHandler(payload => {
   const opcionesNotificacion = {
     body: payload.data.titulo,
     icon: 'icons/icon_new_post.png',
-    click_action: 'https://blogeekplatzi-4836b.firebaseapp.com/'
+    click_action: "https://marlonchca3.github.io/blogeek-platzi.github.io/public/#"
   }
 
   return self.registration.showNotification(
